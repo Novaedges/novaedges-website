@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Optimind AI Automation</title>
+    <style>
+      /* General Body Styles */
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #e0e0e0; /* Main background color for neumorphism */
+        color: #333;
+        line-height: 1.6;
+        scroll-behavior: smooth; /* Smooth scroll for anchor links */
+      }
+
+      /* Reusable Section Styles */
+      section {
+        padding: 80px 20px;
+        text-align: center;
+        background-color: transparent; /* Sections will blend with body background */
+      }
+      section:nth-of-type(even) {
+        /* Alternate background for better visual separation */
+        background-color: #e5e5e5; /* Slightly different shade for even sections */
+      }
+
+      section h2 {
+        font-size: 2.5em; /* Consistent title size */
+        margin-bottom: 15px;
+        color: #333;
+        font-weight: 700;
+      }
+
+      section > p {
+        /* Paragraph directly under the title */
+        font-size: 1.1em;
+        color: #666;
+        margin-bottom: 50px; /* Space before content grid */
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* Header Styling */
+      header {
+        background-color: #e0e0e0; /* Initial header color */
+        padding: 20px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: none; /* No shadow initially for seamless blend */
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for header changes */
+      }
+
+      /* Header style when scrolled */
+      header.header-scrolled {
+        background-color: #f0f0f0; /* Lighter background when scrolled */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* More prominent shadow when scrolled */
+      }
+
+      .logo {
+        font-size: 1.6em;
+        font-weight: bold;
+        color: #333;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        flex-shrink: 0;
+      }
+
+      /* Styles for the main navigation group (Home, Services, Works, Plans) */
+      .main-nav-group {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Styles for the secondary navigation group (Team, Contact) */
+      .secondary-nav-group {
+        flex-shrink: 0;
+        margin-left: 20px;
+      }
+
+      /* Common nav list styles */
+      nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        gap: 30px;
+      }
+
+      nav ul li a {
+        text-decoration: none;
+        color: #555;
+        font-weight: 600;
+        font-size: 0.95em;
+        position: relative; /* For the underline/highlight */
+        transition: color 0.3s ease;
+        padding-bottom: 5px; /* Space for the underline */
+      }
+
+      /* Navigation Underline/Highlight */
+      nav ul li a::after {
+        content: "";
+        position: absolute;
+        left: 50%; /* Start from center */
+        bottom: 0;
+        width: 0; /* No width initially */
+        height: 2px;
+        background-color: #ffa500; /* Orange glow color */
+        border-radius: 2px;
+        transition: width 0.3s ease, left 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      nav ul li a:hover::after,
+      nav ul li a.active::after {
+        width: 100%; /* Expand to full width */
+        left: 0; /* Move to left edge */
+        box-shadow: 0 0 5px rgba(255, 165, 0, 0.6),
+          0 0 10px rgba(255, 165, 0, 0.3); /* Subtle glow */
+      }
+
+      nav ul li a:hover,
+      nav ul li a.active {
+        color: #000;
+      }
+
+      /* Hero Section Styling (Background Video) */
+      .hero {
+        position: relative;
+        overflow: hidden;
+        height: 100vh; /* Full viewport height initially */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        text-align: center;
+        padding: 20px;
+        box-sizing: border-box;
+        transition: height 0.5s ease-out; /* Smooth transition for height change */
+        min-height: 400px; /* Minimum height for smaller screens */
+      }
+
+      .hero video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+        filter: brightness(0.5); /* Darker overlay for text readability */
+      }
+
+      .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      /* Hero Content States */
+      .hero-content {
+        position: absolute;
+        width: 100%;
+        max-width: 800px;
+        padding: 20px;
+        box-sizing: border-box;
+        transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+      }
+
+      .hero-content.hidden {
+        opacity: 0;
+        pointer-events: none; /* Prevent interaction when hidden */
+        transform: translateY(20px); /* Small slide effect when hidden */
+      }
+
+      .hero-content.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .hero-title {
+        font-size: 3.2em;
+        margin-bottom: 20px;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      .hero-subtitle {
+        font-size: 1.3em;
+        color: #eee;
+        margin-bottom: 30px;
+      }
+
+      .hero-buttons .btn {
+        display: inline-block;
+        padding: 12px 25px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: 600;
+        margin: 0 10px;
+        transition: background-color 0.3s ease, color 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .hero-buttons .btn-dark {
+        background-color: #333; /* Dark button */
+        color: #fff;
+        box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2),
+          -4px -4px 8px rgba(255, 255, 255, 0.1);
+      }
+      .hero-buttons .btn-dark:hover {
+        background-color: #000;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3),
+          -2px -2px 5px rgba(255, 255, 255, 0.2);
+      }
+
+      .hero-buttons .btn-light {
+        background-color: #e0e0e0; /* Light button, neumorphic style */
+        color: #555;
+        box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.1),
+          -6px -6px 12px rgba(255, 255, 255, 0.8);
+      }
+      .hero-buttons .btn-light:hover {
+        background-color: #d0d0d0;
+        box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1),
+          -3px -3px 6px rgba(255, 255, 255, 0.6);
+      }
+
+      /* Grid container for cards (Services, Works, Plans, Team) */
+      .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Neumorphic Card Styling */
+      .card {
+        background-color: #e0e0e0; /* Matches body background for raised effect */
+        border-radius: 15px; /* More rounded corners */
+        padding: 30px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        gap: 15px;
+        /* Neumorphic shadow */
+        box-shadow: 8px 8px 16px #bebebe,
+          /* Darker shadow from bottom-right */ -8px -8px 16px #ffffff; /* Lighter shadow from top-left */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        /* Subtle press-in effect on hover */
+        box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+      }
+
+      /* Neumorphic Icon Container Styling */
+      .card-icon-container {
+        width: 80px; /* Larger icon area */
+        height: 80px;
+        background-color: #e0e0e0; /* Matches card background */
+        border-radius: 20px; /* Rounded square */
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 3em; /* Larger icon text */
+        color: #555; /* Muted icon color */
+        font-weight: bold;
+        /* Neumorphic debossed effect with glow */
+        box-shadow: inset 5px 5px 10px #b5b5b5,
+          /* Darker inset shadow (bottom-right) */ inset -5px -5px 10px #ffffff; /* Lighter inset shadow (top-left) */
+        /* Glow effect (optional, subtle) */
+        text-shadow: 0 0 5px rgba(255, 165, 0, 0.4),
+          0 0 10px rgba(255, 165, 0, 0.2); /* Orange glow */
+        transition: box-shadow 0.3s ease, text-shadow 0.3s ease;
+      }
+
+      .card-title h3 {
+        margin: 0;
+        font-size: 1.5em;
+        color: #333;
+        font-weight: 600;
+      }
+
+      .card-description {
+        font-size: 1em;
+        color: #777;
+        line-height: 1.7;
+      }
+
+      /* Specific styles for Our Works cards */
+      .work-card {
+        background-color: #e0e0e0; /* Still neumorphic base */
+        padding: 0;
+        overflow: hidden;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff; /* Consistent neumorphic shadow */
+      }
+      .work-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        margin-bottom: 15px;
+      }
+      .work-card-content {
+        padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .work-card-content h3 {
+        font-size: 1.3em;
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #333;
+      }
+      .work-card-content p {
+        font-size: 0.95em;
+        color: #777;
+        flex-grow: 1;
+      }
+      .work-card .btn {
+        /* Small button for "View Case Study" */
+        display: inline-block;
+        padding: 8px 15px;
+        font-size: 0.9em;
+        margin-top: 15px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1),
+          -3px -3px 6px rgba(255, 255, 255, 0.3);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      }
+      .work-card .btn:hover {
+        background-color: #0056b3;
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2),
+          -1px -1px 3px rgba(255, 255, 255, 0.2);
+      }
+
+      /* Specific styles for Our Plans cards */
+      .plan-card {
+        background-color: #e0e0e0;
+        padding: 30px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+        border-radius: 15px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .plan-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+      }
+      .plan-card h3 {
+        font-size: 1.8em;
+        margin-bottom: 10px;
+        color: #007bff; /* Highlight plan name */
+      }
+      .plan-card .price {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+      }
+      .plan-card .price span {
+        font-size: 0.5em;
+        vertical-align: super;
+        font-weight: normal;
+      }
+      .plan-card ul {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 30px;
+        text-align: left;
+        width: 100%;
+      }
+      .plan-card ul li {
+        margin-bottom: 10px;
+        color: #555;
+        display: flex;
+        align-items: center;
+      }
+      .plan-card ul li:before {
+        content: "✓"; /* Checkmark icon */
+        color: #28a745; /* Green checkmark */
+        margin-right: 10px;
+        font-weight: bold;
+      }
+      .plan-card .btn {
+        /* Use neumorphic button for plans */
+        width: 100%;
+        padding: 12px 0;
+        background-color: #e0e0e0;
+        color: #007bff;
+        box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.1),
+          -6px -6px 12px rgba(255, 255, 255, 0.8);
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .plan-card .btn:hover {
+        background-color: #d0d0d0;
+        box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1),
+          -3px -3px 6px rgba(255, 255, 255, 0.6);
+      }
+
+      /* Specific styles for Team cards */
+      .team-card {
+        background-color: #e0e0e0;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+        border-radius: 15px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .team-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+      }
+      .team-card img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%; /* Circular image */
+        object-fit: cover;
+        margin-bottom: 15px;
+        border: 4px solid #e0e0e0; /* Light border around image */
+        box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+          inset -2px -2px 5px rgba(255, 255, 255, 0.5); /* Inner shadow for profile pic border */
+      }
+      .team-card h3 {
+        font-size: 1.4em;
+        margin-bottom: 5px;
+        color: #333;
+      }
+      .team-card p {
+        font-size: 0.95em;
+        color: #777;
+        margin-bottom: 15px;
+      }
+      .team-card .social-links a {
+        display: inline-block;
+        margin: 0 8px;
+        color: #007bff;
+        font-size: 1.2em;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+      .team-card .social-links a:hover {
+        color: #0056b3;
+      }
+
+      /* Contact Us Form */
+      .contact-form-container {
+        max-width: 700px;
+        margin: 0 auto;
+        background-color: #e0e0e0; /* Matches body background */
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+        text-align: left;
+      }
+      .contact-form-container label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #555;
+      }
+      .contact-form-container input[type="text"],
+      .contact-form-container input[type="email"],
+      .contact-form-container textarea {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: none; /* No border for neumorphic input */
+        background-color: #e0e0e0; /* Matches background */
+        border-radius: 8px;
+        font-size: 1em;
+        box-sizing: border-box;
+        /* Debossed input effect */
+        box-shadow: inset 4px 4px 8px #b5b5b5, inset -4px -4px 8px #ffffff;
+        transition: box-shadow 0.3s ease;
+      }
+      .contact-form-container input[type="text"]:focus,
+      .contact-form-container input[type="email"]:focus,
+      .contact-form-container textarea:focus {
+        outline: none;
+        box-shadow: inset 2px 2px 4px #b5b5b5, inset -2px -2px 4px #ffffff,
+          0 0 0 2px rgba(0, 123, 255, 0.3); /* Focus ring */
+      }
+      .contact-form-container textarea {
+        resize: vertical;
+        min-height: 120px;
+      }
+      .contact-form-container input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1.1em;
+        font-weight: 600;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        display: block;
+        width: 100%;
+        box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.1),
+          -6px -6px 12px rgba(255, 255, 255, 0.8);
+      }
+      .contact-form-container input[type="submit"]:hover {
+        background-color: #0056b3;
+        box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1),
+          -3px -3px 6px rgba(255, 255, 255, 0.6);
+      }
+      .contact-info {
+        margin-top: 40px;
+        text-align: center;
+      }
+      .contact-info p {
+        margin-bottom: 10px;
+        color: #555;
+        font-size: 1em;
+      }
+      .contact-info a {
+        color: #007bff;
+        text-decoration: none;
+      }
+      .contact-info a:hover {
+        text-decoration: underline;
+      }
+
+      /* Footer Styling */
+      footer {
+        text-align: center;
+        padding: 30px 20px;
+        background-color: #e0e0e0;
+        color: #555;
+        font-size: 0.9em;
+        margin-top: 50px;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      /* Responsive Adjustments */
+      @media (max-width: 768px) {
+        header {
+          flex-direction: column;
+          padding: 15px 20px;
+          gap: 15px;
+        }
+
+        .main-nav-group,
+        .secondary-nav-group {
+          flex-grow: unset;
+          width: 100%;
+          justify-content: center;
+          margin-left: 0;
+        }
+
+        nav ul {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 15px;
+        }
+
+        .hero {
+          height: 70vh; /* Adjust hero height for smaller screens */
+          min-height: 350px;
+        }
+
+        .hero-title {
+          font-size: 2.2em;
+        }
+
+        .hero-subtitle {
+          font-size: 1em;
+        }
+
+        section {
+          padding: 60px 20px;
+        }
+
+        section h2 {
+          font-size: 2em;
+        }
+
+        .grid-container {
+          grid-template-columns: 1fr;
+        }
+
+        .card,
+        .work-card,
+        .plan-card,
+        .team-card {
+          padding: 25px;
+          align-items: center;
+          text-align: center;
+        }
+        .card-icon-container {
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .card-description {
+          text-align: center;
+        }
+        .plan-card ul {
+          text-align: center;
+        }
+        .plan-card ul li {
+          justify-content: center;
+        }
+
+        .team-card img {
+          margin-bottom: 10px;
+        }
+
+        .contact-form-container {
+          padding: 30px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .logo {
+          font-size: 1.4em;
+        }
+
+        nav ul li a {
+          font-size: 0.85em;
+        }
+
+        .hero {
+          height: 60vh;
+          min-height: 300px;
+        }
+
+        .hero-title {
+          font-size: 1.8em;
+        }
+
+        .hero-subtitle {
+          font-size: 0.9em;
+        }
+
+        .hero-buttons .btn {
+          padding: 10px 20px;
+          font-size: 0.9em;
+          margin: 5px;
+        }
+
+        section h2 {
+          font-size: 1.8em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header id="main-header">
+      <div class="logo">Novaedge</div>
+      <nav class="main-nav-group">
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#plans">Plans</a></li>
+        </ul>
+      </nav>
+      <nav class="secondary-nav-group">
+        <ul>
+          <li><a href="#team">Team</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <section class="hero" id="home">
+      <video autoplay loop muted playsinline>
+        <source src="/assets/video.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div class="hero-overlay">
+        <div class="hero-content initial-content active">
+          <h1 class="hero-title">GROWING SMARTER WITH AI</h1>
+          <p class="hero-subtitle">
+            We specialize in workflow automation and personalized AI solutions
+            for progressive organizations.
+          </p>
+          <div class="hero-buttons">
+            <a href="#contact" class="btn btn-dark">GET IN TOUCH</a>
+            <a href="#services" class="btn btn-light">OUR SERVICES</a>
+          </div>
+        </div>
+        <div class="hero-content scrolled-content hidden">
+          <h1 class="hero-title">
+            WE'RE A FULL-SERVICE<br />AI AUTOMATION AGENCY.
+          </h1>
+          <p class="hero-subtitle">
+            Helping forward-looking companies thrive with custom AI solutions
+            and automated workflows.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="services-section" id="services">
+      <h2>DISCOVER OUR SERVICES</h2>
+      <p>We deliver complete AI automation services under one roof.</p>
+      <div class="grid-container">
+        <div class="card">
+          <div class="card-icon-container">C</div>
+          <div class="card-title"><h3>Workflow Optimization</h3></div>
+          <div class="card-description">
+            We automate your workflows by connecting your favourite
+            applications. Boosting efficiency and enhancing productivity.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon-container">A</div>
+          <div class="card-title"><h3>Business Consulting</h3></div>
+          <div class="card-description">
+            Using our expertise, we delve deep into your organisation and
+            consult you on how AI-driven automations could enhance your
+            operations.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon-container">&</div>
+          <div class="card-title"><h3>Chatbot Development</h3></div>
+          <div class="card-description">
+            We develop advanced chatbots that are reactive, understand nuances,
+            and are capable of solving extremely complicated queries.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="work">
+      <h2>OUR WORKS</h2>
+      <p>
+        Explore our recent projects and see how we've helped businesses achieve
+        their automation goals.
+      </p>
+      <div class="grid-container">
+        <div class="card work-card">
+          <img src="./assets/ecom.jpg" alt="Project 1" />
+          <div class="work-card-content">
+            <h3>E-commerce Automation</h3>
+            <p>
+              Implemented AI-driven solutions for order processing, inventory
+              management, and customer support for a leading online retailer.
+            </p>
+            <a href="#" class="btn">View Case Study</a>
+          </div>
+        </div>
+        <div class="card work-card">
+          <img src="./assets/health.jpg" alt="Project 2" />
+          <div class="work-card-content">
+            <h3>Healthcare Data Integration</h3>
+            <p>
+              Developed secure automated workflows to integrate patient data
+              across disparate healthcare systems, improving efficiency and
+              accuracy.
+            </p>
+            <a href="#" class="btn">View Case Study</a>
+          </div>
+        </div>
+        <div class="card work-card">
+          <img src="./assets//finance.jpg" alt="Project 3" />
+          <div class="work-card-content">
+            <h3>Financial Reporting Automation</h3>
+            <p>
+              Automated complex financial data extraction and report generation,
+              reducing manual effort and potential errors for a finance firm.
+            </p>
+            <a href="#" class="btn">View Case Study</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="plans">
+      <h2>OUR PLANS</h2>
+      <p>
+        Choose the AI automation plan that best fits your business needs and
+        budget.
+      </p>
+      <div class="grid-container">
+        <div class="plan-card">
+          <h3>Starter</h3>
+          <div class="price">$499<span>/month</span></div>
+          <ul>
+            <li>✓ Basic Workflow Automation</li>
+            <li>✓ 1 Chatbot Integration</li>
+            <li>✓ Email Support</li>
+            <li>✓ Monthly Performance Report</li>
+            <li>✓ Up to 5 Automated Tasks</li>
+          </ul>
+          <a href="#" class="btn">Choose Plan</a>
+        </div>
+        <div class="plan-card">
+          <h3>Pro</h3>
+          <!-- <h3 style="color: #28a745">Pro</h3> -->
+          <div class="price">$999<span>/month</span></div>
+          <ul>
+            <li>✓ Advanced Workflow Automation</li>
+            <li>✓ 3 Chatbot Integrations</li>
+            <li>✓ Priority Email/Chat Support</li>
+            <li>✓ Bi-Weekly Performance Review</li>
+            <li>✓ Up to 20 Automated Tasks</li>
+            <li>✓ Basic AI Consulting</li>
+          </ul>
+          <a href="#" class="btn">Choose Plan</a>
+        </div>
+        <div class="plan-card">
+          <h3>Enterprise</h3>
+          <div class="price">$1999<span>/month</span></div>
+          <ul>
+            <li>✓ Custom AI Solutions</li>
+            <li>✓ Unlimited Chatbot Integrations</li>
+            <li>✓ Dedicated Account Manager</li>
+            <li>✓ Weekly Strategic Review</li>
+            <li>✓ Unlimited Automated Tasks</li>
+            <li>✓ In-depth AI Consulting</li>
+            <li>✓ On-site Support Options</li>
+          </ul>
+          <a href="#" class="btn">Choose Plan</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="team">
+      <h2>MEET OUR TEAM</h2>
+      <p>
+        Our diverse team of AI specialists, developers, and consultants are
+        dedicated to your success.
+      </p>
+      <div class="grid-container">
+        <div class="team-card">
+          <img src="./assets/pexels-n-voitkevich-6214471.jpg" alt="John Doe" />
+          <h3>John Doe</h3>
+          <p>CEO & Lead AI Strategist</p>
+          <div class="social-links"><a href="#">F</a> <a href="#">T</a></div>
+        </div>
+        <div class="team-card">
+          <img
+            src="./assets/pexels-bertellifotografia-16094057.jpg"
+            alt="Jane Smith"
+          />
+          <h3>Jane Smith</h3>
+          <p>Head of Automation</p>
+          <div class="social-links">
+            <a href="#">F</a>
+            <a href="#">T</a>
+          </div>
+        </div>
+        <div class="team-card">
+          <img
+            src="./assets/pexels-yankrukov-7691699.jpg"
+            alt="Mike Williams"
+          />
+          <h3>Mike Williams</h3>
+          <p>Senior Chatbot Developer</p>
+          <div class="social-links">
+            <a href="#">F</a>
+            <a href="#">T</a>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="./assets/team.jpg" alt="Sarah Lee" />
+          <h3>Sarah Lee</h3>
+          <p>Business Analyst</p>
+          <div class="social-links">
+            <a href="#">F</a>
+            <a href="#">T</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>CONTACT US</h2>
+      <p>
+        Have questions about AI automation? We're here to help. Reach out to us
+        for a free consultation.
+      </p>
+      <div class="contact-form-container">
+        <form action="#" method="POST">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required />
+
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required></textarea>
+
+          <input type="submit" value="Send Message" />
+        </form>
+        <div class="contact-info">
+          <p>
+            <strong>Address:</strong> 123 AI Avenue, Automation City, AB 12345
+          </p>
+          <p>
+            <strong>Phone:</strong>
+            <a href="tel:+1234567890">+1 (234) 567-890</a>
+          </p>
+          <p>
+            <strong>Email:</strong>
+            <a href="mailto:info@optimind.com">info@optimind.com</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2023 Optimind. All rights reserved.</p>
+    </footer>
+
+    <script>
+      // Smooth scrolling for navigation links
+      document.querySelectorAll("nav a").forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          document.querySelector(this.getAttribute("href")).scrollIntoView({
+            behavior: "smooth",
+          });
+        });
+      });
+
+      // Get elements for scroll effects
+      const mainHeader = document.getElementById("main-header");
+      const heroSection = document.getElementById("home");
+      const initialContent = heroSection.querySelector(".initial-content");
+      const scrolledContent = heroSection.querySelector(".scrolled-content");
+      const heroVideo = heroSection.querySelector("video");
+
+      // Define scroll thresholds
+      const contentSwitchThreshold = window.innerHeight * 0.3; // When to switch hero text
+      const headerScrollThreshold = window.innerHeight * 0.7; // When header changes color/shadow
+      const heroMinHeight = 350; // Minimum height for the hero section
+
+      function handleScroll() {
+        const scrollY = window.scrollY;
+
+        // --- Header Color/Shadow Transition ---
+        if (scrollY > headerScrollThreshold) {
+          mainHeader.classList.add("header-scrolled");
+        } else {
+          mainHeader.classList.remove("header-scrolled");
+        }
+
+        // --- Hero Text Content Switching ---
+        if (scrollY < contentSwitchThreshold) {
+          initialContent.classList.add("active");
+          initialContent.classList.remove("hidden");
+          scrolledContent.classList.remove("active");
+          scrolledContent.classList.add("hidden");
+        } else {
+          initialContent.classList.remove("active");
+          initialContent.classList.add("hidden");
+          scrolledContent.classList.add("active");
+          scrolledContent.classList.remove("hidden");
+        }
+
+        // --- Hero Section Height Shrinking ---
+        let newHeroHeight = window.innerHeight - scrollY;
+        if (newHeroHeight < heroMinHeight) {
+          newHeroHeight = heroMinHeight;
+        }
+        // Ensure it doesn't grow back unexpectedly when scrolling up from bottom
+        if (scrollY > window.innerHeight) {
+          newHeroHeight = heroMinHeight;
+        }
+
+        heroSection.style.height = `${newHeroHeight}px`;
+
+        // Optional: Adjust video brightness based on scroll if needed, or other effects
+        // const brightness = Math.max(0.5, 0.7 - (scrollY / (window.innerHeight * 2)));
+        // heroVideo.style.filter = `brightness(${brightness})`;
+      }
+
+      // Initial call and event listener
+      window.addEventListener("scroll", handleScroll);
+      handleScroll(); // Call once on load to set initial state
+
+      // Ensure video plays on page load (important for some browsers)
+      if (heroVideo) {
+        heroVideo.play().catch((error) => {
+          console.log(
+            "Video autoplay prevented, user interaction might be needed:",
+            error
+          );
+          // Optionally show a play button if autoplay fails
+        });
+      }
+    </script>
+  </body>
+</html>
