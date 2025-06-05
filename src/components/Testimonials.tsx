@@ -31,7 +31,9 @@ export default function Testimonials() {
             },
           ].map(({ text, name, role, avatar }) => (
             <div className="testimonial-card fade-in" key={name}>
-              <p className="testimonial-text">"{text}"</p>
+              {/* <p className="testimonial-text">"{text}"</p> */}
+              <p className="testimonial-text">&ldquo;{text}&rdquo;</p>
+
               <div className="testimonial-author">
                 <div className="author-avatar">{avatar}</div>
                 <div className="author-info">
